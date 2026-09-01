@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { family, gatherings, recipes, stories } from "./data.js";
 
 const VIEWS = [
@@ -170,20 +170,18 @@ function Rsvp() {
 
 export default function App() {
   const [view, setView] = useState("home");
-  const screen = useMemo(() => {
-    switch (view) {
-      case "recipes":
-        return <Recipes />;
-      case "gatherings":
-        return <Gatherings />;
-      case "stories":
-        return <Stories />;
-      case "rsvp":
-        return <Rsvp />;
-      default:
-        return <Home />;
-    }
-  }, [view]);
+  const screen =
+    view === "recipes" ? (
+      <Recipes />
+    ) : view === "gatherings" ? (
+      <Gatherings />
+    ) : view === "stories" ? (
+      <Stories />
+    ) : view === "rsvp" ? (
+      <Rsvp />
+    ) : (
+      <Home />
+    );
 
   return (
     <div className="shell">

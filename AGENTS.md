@@ -17,6 +17,11 @@ You are the local executor. Grok is CEO. You do specialist work inside this repo
 - Flag money risk, court risk, data-loss risk immediately.
 - Wait for the user to type `approved` before commit, push, deploy, delete, or any irreversible action.
 
+## Speed
+- One pass. No extra agents or personas.
+- Skip unused plugins and long research.
+- Smallest diff. Stop when tests pass.
+
 ## Quality
 - Map the repo before large changes.
 - Run the project’s real test/build commands. Do not invent them.

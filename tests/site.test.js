@@ -27,4 +27,15 @@ describe("netlify form detection", () => {
     assert.match(toml, /to = "\/index.html"/);
     assert.match(toml, /status = 200/);
   });
+
+  it("does not block first paint on webfonts", () => {
+    const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+    assert.doesNotMatch(html, /fonts\.googleapis/);
+  });
+
+  it("caches hashed assets on the CDN", () => {
+    const toml = readFileSync(new URL("../netlify.toml", import.meta.url), "utf8");
+    assert.match(toml, /for = "\/assets\/\*"/);
+    assert.match(toml, /max-age=31536000/);
+  });
 });

@@ -101,6 +101,8 @@ Root docs stay the Copilot performance system. Product code from resolved PRs li
 
 Netlify builds `apps/family-hearth` via the root `netlify.toml` `base` setting. Content in `apps/family-hearth/src/data.js` is fictional (Calder / Maplewick), not private family records.
 
+Editor shortcuts for Cursor (VS Code): `docs/EDITOR_BASICS.md`.
+
 ### Workflows (GitHub Actions)
 
 | Workflow | Trigger | Actions |

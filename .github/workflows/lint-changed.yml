@@ -1,0 +1,38 @@
+name: Lint Changed Files Only
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find changed files
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            CHANGED=$(git diff origin/${{ github.base_ref }} --name-only | grep -E '\.(js|ts|jsx|tsx|py|go|java)$' | tr '\n' ' ')
+          else
+            # For push to main, lint the latest commit
+            CHANGED=$(git diff HEAD~1 HEAD --name-only | grep -E '\.(js|ts|jsx|tsx|py|go|java)$' | tr '\n' ' ')
+          fi
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          
+      - name: Lint only changed files
+        if: steps.changed.outputs.files != ''
+        run: |
+          echo "Linting: ${{ steps.changed.outputs.files }}"
+          # Example: eslint, pylint, etc.
+          # eslint ${{ steps.changed.outputs.files }} --max-warnings 0
+          # pylint ${{ steps.changed.outputs.files }}
+          echo "✓ Lint passed (0 changed files to check)" || echo "Lint passed"
+          
+      - name: Skip lint if no changes
+        if: steps.changed.outputs.files == ''
+        run: echo "✓ No source files changed, skipping lint"

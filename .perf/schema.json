@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Copilot Performance Metrics",
+  "description": "Schema for tracking session performance, quality, efficiency, and safety metrics",
+  "type": "object",
+  "required": ["session", "quality", "efficiency", "safety"],
+  "properties": {
+    "session": {
+      "type": "object",
+      "required": ["id", "duration_minutes", "status", "created_at"],
+      "properties": {
+        "id": { "type": "string", "description": "Session identifier" },
+        "duration_minutes": { "type": "number", "description": "Session duration in minutes" },
+        "status": { "type": "string", "enum": ["in_progress", "merged", "failed", "abandoned"] },
+        "created_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "properties": {
+        "test_pass_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "lint_pass": { "type": "boolean" },
+        "secrets_detected": { "type": "boolean" },
+        "pr_review_feedback": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "efficiency": {
+      "type": "object",
+      "properties": {
+        "diff_lines": { "type": "integer", "description": "Total lines changed" },
+        "commit_count": { "type": "integer" },
+        "rework_loops": { "type": "integer", "description": "Number of test-fail-fix cycles" },
+        "files_changed": { "type": "integer" }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "properties": {
+        "risk_flags": { "type": "integer", "description": "Number of flagged risks" },
+        "approval_waited": { "type": "boolean" },
+        "merge_by_user": { "type": "string" }
+      }
+    }
+  }
+}

@@ -33,8 +33,8 @@ jobs:
       - name: Detect extra runtimes
         id: detect
         run: |
-          if [ -f "requirements.txt" ] || [ -f "setup.py" ] || [ -f "pyproject.toml" ]; then echo "type=python" >> $GITHUB_OUTPUT; fi
-          if [ -f "go.mod" ]; then echo "type=go" >> $GITHUB_OUTPUT; fi
+          if [ -f "requirements.txt" ] || [ -f "setup.py" ] || [ -f "pyproject.toml" ]; then echo "type=python" >> "$GITHUB_OUTPUT"; fi
+          if [ -f "go.mod" ]; then echo "type=go" >> "$GITHUB_OUTPUT"; fi
 
       - uses: actions/setup-python@v5
         if: steps.detect.outputs.type == 'python'

@@ -16,47 +16,66 @@ jobs:
       - name: Detect affected tests
         id: affected
         run: |
+          set -euo pipefail
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            # PR: changes from base branch
-            CHANGED=$(git diff origin/${{ github.base_ref }} --name-only)
+            git fetch origin "${{ github.base_ref }}" --depth=1
+            CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")
           else
-            # Push: changes from previous commit
-            CHANGED=$(git diff HEAD~1 HEAD --name-only)
+            CHANGED=$(git diff --name-only HEAD~1 HEAD)
           fi
-          
-          # Map changed files to test files
-          # Example mapping: src/utils.js → tests/utils.test.js
+
           TESTS=""
-          for FILE in $CHANGED; do
-            # Convert path: src/foo.js → tests/foo.test.js (or tests/foo/)
-            TEST_FILE="${FILE#src/}"
-            TEST_FILE="tests/${TEST_FILE%.js}.test.js"
-            if [ -f "$TEST_FILE" ]; then
-              TESTS="$TESTS $TEST_FILE"
-            fi
-          done
-          
-          echo "tests=$TESTS" >> $GITHUB_OUTPUT
-          echo "changed_files=$CHANGED" >> $GITHUB_OUTPUT
+          while IFS= read -r FILE; do
+            [ -z "$FILE" ] && continue
+            case "$FILE" in
+              apps/demo/server/*.js)
+                TESTS="${TESTS} apps/demo/server/index.test.js"
+                ;;
+              apps/family-hearth/src/*|apps/family-hearth/index.html|apps/family-hearth/netlify.toml)
+                TESTS="${TESTS} apps/family-hearth/tests/site.test.js"
+                ;;
+            esac
+          done <<EOF
+          $CHANGED
+          EOF
 
-      - name: Run affected tests
+          {
+            echo "tests<<EOF"
+            echo "$TESTS"
+            echo "EOF"
+            echo "changed_files<<EOF"
+            echo "$CHANGED"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Run affected app tests
         if: steps.affected.outputs.tests != ''
-        run: |
-          echo "Running affected tests: ${{ steps.affected.outputs.tests }}"
-          # npm test -- ${{ steps.affected.outputs.tests }} --bail
-          echo "✓ Tests passed"
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
 
-      - name: Run full suite on main
-        if: github.ref == 'refs/heads/main' && steps.affected.outputs.tests == ''
+      - name: Install and test demo
+        if: contains(steps.affected.outputs.tests, 'apps/demo/')
+        working-directory: apps/demo
         run: |
-          echo "Running full test suite on main branch"
-          # npm test
-          echo "✓ Full test suite passed"
+          npm ci
+          npm test
+
+      - name: Install and test family hearth
+        if: contains(steps.affected.outputs.tests, 'apps/family-hearth/')
+        working-directory: apps/family-hearth
+        run: |
+          npm ci
+          npm test
 
       - name: Report test impact
         run: |
-          echo "## Test Impact Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Changed files:** $(echo '${{ steps.affected.outputs.changed_files }}' | wc -w)" >> $GITHUB_STEP_SUMMARY
-          echo "**Affected tests:** $(echo '${{ steps.affected.outputs.tests }}' | wc -w)" >> $GITHUB_STEP_SUMMARY
-          echo "**Skipped tests:** $(total_tests - affected_tests)" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Test Impact Report"
+            echo ""
+            echo "**Changed files:**"
+            echo '```'
+            echo "${{ steps.affected.outputs.changed_files }}"
+            echo '```'
+            echo "**Affected tests:** ${{ steps.affected.outputs.tests }}"
+          } >> "$GITHUB_STEP_SUMMARY"

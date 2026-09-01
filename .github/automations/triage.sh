@@ -49,18 +49,20 @@ detect_priority() {
   fi
 }
 
-# Apply labels to issue
+# Apply labels to issue (best-effort; missing labels or permissions must not fail CI)
 apply_labels() {
   local issue_type="$1"
   local priority="$2"
   local labels="$issue_type,$priority"
-  
+
   log "Applying labels: $labels"
-  
+
   gh api \
     -X POST \
     "repos/$REPO/issues/$ISSUE_NUMBER/labels" \
-    --input - <<< "{\"labels\":[$(echo "$labels" | sed 's/,/","/g' | sed 's/^/"/;s/$/"/')  ]}"
+    --input - <<< "{\"labels\":[$(echo "$labels" | sed 's/,/","/g' | sed 's/^/"/;s/$/"/')  ]}" \
+    && return 0
+  log "Label apply skipped (labels may not exist, or token lacks issues:write)"
 }
 
 # Auto-assign based on labels
@@ -91,14 +93,8 @@ auto_assign() {
 # PR: Request reviewers
 request_reviewers() {
   local pr_number="$1"
-  
-  log "Requesting code review for PR #$pr_number"
-  
-  # Request 2 random reviewers
-  gh api \
-    -X POST \
-    "repos/$REPO/pulls/$pr_number/requested_reviewers" \
-    --input - <<< '{"reviewers":["reviewer1","reviewer2"]}'
+
+  log "Skipping reviewer request for PR #$pr_number (no default reviewers configured)"
 }
 
 # PR: Check test status
@@ -153,16 +149,8 @@ main() {
   elif [ -n "$PR_NUMBER" ]; then
     log "Processing PR #$PR_NUMBER"
     
-    # Request reviewers
     request_reviewers "$PR_NUMBER"
-    
-    # Check tests
-    if check_tests "$PR_NUMBER"; then
-      log "PR #$PR_NUMBER ready for review"
-    else
-      log "Tests failed for PR #$PR_NUMBER"
-      exit 1
-    fi
+    log "PR #$PR_NUMBER classified; test status is left to required checks"
   fi
 }
 

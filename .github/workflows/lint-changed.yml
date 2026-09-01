@@ -16,23 +16,32 @@ jobs:
       - name: Find changed files
         id: changed
         run: |
+          set +e
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            CHANGED=$(git diff origin/${{ github.base_ref }} --name-only | grep -E '\.(js|ts|jsx|tsx|py|go|java)$' | tr '\n' ' ')
+            git fetch origin "${{ github.base_ref }}" --depth=1
+            CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" | grep -E '\.(js|ts|jsx|tsx|py|go|java)$' | tr '\n' ' ')
           else
-            # For push to main, lint the latest commit
-            CHANGED=$(git diff HEAD~1 HEAD --name-only | grep -E '\.(js|ts|jsx|tsx|py|go|java)$' | tr '\n' ' ')
+            CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '\.(js|ts|jsx|tsx|py|go|java)$' | tr '\n' ' ')
           fi
-          echo "files=$CHANGED" >> $GITHUB_OUTPUT
-          
-      - name: Lint only changed files
-        if: steps.changed.outputs.files != ''
+          {
+            echo "files<<EOF"
+            echo "$CHANGED"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Lint demo if JS changed
+        if: contains(steps.changed.outputs.files, 'apps/demo/')
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run demo eslint
+        if: contains(steps.changed.outputs.files, 'apps/demo/')
+        working-directory: apps/demo
         run: |
-          echo "Linting: ${{ steps.changed.outputs.files }}"
-          # Example: eslint, pylint, etc.
-          # eslint ${{ steps.changed.outputs.files }} --max-warnings 0
-          # pylint ${{ steps.changed.outputs.files }}
-          echo "✓ Lint passed (0 changed files to check)" || echo "Lint passed"
-          
-      - name: Skip lint if no changes
-        if: steps.changed.outputs.files == ''
-        run: echo "✓ No source files changed, skipping lint"
+          npm ci
+          npm run lint
+
+      - name: Skip lint if no app JS changed
+        if: ${{ !contains(steps.changed.outputs.files, 'apps/demo/') }}
+        run: echo "No demo JS/TS changes; skipping eslint"

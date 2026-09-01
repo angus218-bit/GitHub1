@@ -6,13 +6,18 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
 jobs:
   triage-issue:
     runs-on: ubuntu-latest
     if: github.event_name == 'issues'
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Triage issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -27,7 +32,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Triage PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

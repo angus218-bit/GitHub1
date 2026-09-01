@@ -1,0 +1,15 @@
+---
+description: Voice, structure, and UX conventions for the Family Hearth site
+alwaysApply: true
+---
+
+# Family Hearth
+
+This repo is a Netlify-hosted family website named **The Calder Hearth**.
+
+- Keep copy warm, specific, and unhurried. Avoid corporate SaaS language.
+- Preserve the ember-and-paper palette (`#1c1410`, `#f4ead8`, `#c45c26`, `#d4a056`).
+- Routes are in-app views in `src/App.jsx`: home, recipes, gatherings, stories, rsvp.
+- Recipe, gathering, and story content lives in `src/data.js`. Edit there, not as one-off JSX strings.
+- The RSVP form must stay compatible with Netlify Forms (`name="family-rsvp"`, matching fields in `index.html`).
+- Do not add backend databases unless explicitly requested. Static content plus Netlify Forms is the stack.

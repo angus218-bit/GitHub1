@@ -1,0 +1,6 @@
+{
+  "name": "family-hearth",
+  "description": "Cursor plugin pack for the Family Hearth website: Netlify deploy conventions, form handling, and site voice.",
+  "version": "1.0.0",
+  "author": { "name": "Family Hearth" }
+}

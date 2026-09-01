@@ -1,0 +1,238 @@
+:root {
+  --ink: #1c1410;
+  --paper: #f4ead8;
+  --ember: #c45c26;
+  --gold: #d4a056;
+  --moss: #3d5c4a;
+  --mute: #6b5748;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Nunito Sans", system-ui, sans-serif;
+  background:
+    radial-gradient(1200px 500px at 50% -10%, #3a2418 0%, transparent 55%),
+    var(--ink);
+  color: var(--paper);
+}
+
+h1,
+h2,
+.brand {
+  font-family: "Fraunces", Georgia, serif;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.4rem;
+}
+
+h2 {
+  font-size: 1.45rem;
+  margin: 0 0 0.35rem;
+}
+
+.shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 4rem;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(244, 234, 216, 0.12);
+}
+
+.brand {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  background: none;
+  border: 0;
+  color: var(--gold);
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
+.mark {
+  width: 28px;
+  height: 28px;
+  color: var(--ember);
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.nav-link {
+  background: transparent;
+  border: 0;
+  color: var(--paper);
+  opacity: 0.72;
+  font: inherit;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.nav-link.current,
+.nav-link:hover {
+  opacity: 1;
+  background: rgba(196, 92, 38, 0.22);
+}
+
+main {
+  padding-top: 2.5rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  color: var(--gold);
+  margin: 0 0 0.5rem;
+}
+
+.lede {
+  font-size: 1.2rem;
+  max-width: 36rem;
+  color: rgba(244, 234, 216, 0.86);
+}
+
+.body-copy {
+  max-width: 38rem;
+  line-height: 1.6;
+  color: rgba(244, 234, 216, 0.78);
+}
+
+.hero {
+  position: relative;
+  padding: 2rem 0 5rem;
+}
+
+.hearth-glow {
+  width: min(420px, 90%);
+  height: 140px;
+  margin-top: 2.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196, 92, 38, 0.55), transparent 70%);
+  filter: blur(8px);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.card,
+.row-card,
+.paper {
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 18px;
+  padding: 1.2rem 1.25rem;
+}
+
+.card .eyebrow,
+.row-card .eyebrow {
+  color: var(--moss);
+}
+
+.quiet {
+  color: var(--mute);
+  font-size: 0.95rem;
+}
+
+.stack {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.rsvp-form {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 28rem;
+}
+
+.rsvp-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.rsvp-form input,
+.rsvp-form textarea {
+  font: inherit;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(244, 234, 216, 0.25);
+  background: #2a201b;
+  color: var(--paper);
+}
+
+.rsvp-form button,
+.notice {
+  font: inherit;
+}
+
+.rsvp-form button {
+  justify-self: start;
+  background: var(--ember);
+  color: #fff8ef;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.7rem 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+}
+
+.notice {
+  background: rgba(61, 92, 74, 0.35);
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+}
+
+.notice.error {
+  background: rgba(196, 92, 38, 0.28);
+}
+
+footer {
+  margin-top: 4rem;
+  color: rgba(244, 234, 216, 0.45);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  .top {
+    align-items: flex-start;
+  }
+}

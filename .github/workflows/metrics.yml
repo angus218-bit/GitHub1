@@ -14,30 +14,57 @@ jobs:
     if: github.event.pull_request.merged == true
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Collect PR metrics
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_ACTOR: ${{ github.actor }}
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          PR_TITLE="${{ github.event.pull_request.title }}"
           DURATION=$(( $(date +%s) - $(git log -1 --format=%ct) ))
           MINUTES=$(( DURATION / 60 ))
-          DIFF_LINES=$(git diff origin/${{ github.base_ref }} --numstat | awk '{added+=$1; removed+=$2} END {print added+removed}')
-          COMMIT_COUNT=$(git log origin/${{ github.base_ref }}.. --oneline | wc -l)
-          FILES_CHANGED=$(git diff origin/${{ github.base_ref }} --name-only | wc -l)
-          
-          # Capture test results from previous steps
-          TEST_PASS_RATE=1.0
-          LINT_PASS=true
-          
-          # Create metrics entry
-          METRICS="{\"session\":{\"id\":\"pr-$PR_NUMBER\",\"duration_minutes\":$MINUTES,\"status\":\"merged\",\"created_at\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"},\"quality\":{\"test_pass_rate\":$TEST_PASS_RATE,\"lint_pass\":$LINT_PASS,\"secrets_detected\":false,\"pr_review_feedback\":[]},\"efficiency\":{\"diff_lines\":$DIFF_LINES,\"commit_count\":$COMMIT_COUNT,\"rework_loops\":0,\"files_changed\":$FILES_CHANGED},\"safety\":{\"risk_flags\":0,\"approval_waited\":true,\"merge_by_user\":\"${{ github.actor }}\"}}"
-          
-          echo "$METRICS" >> .perf/metrics.jsonl
-          
+          DIFF_LINES=$(git diff "origin/${BASE_REF}" --numstat | awk '{added+=$1; removed+=$2} END {print added+removed}')
+          COMMIT_COUNT=$(git log "origin/${BASE_REF}".. --oneline | wc -l)
+          FILES_CHANGED=$(git diff "origin/${BASE_REF}" --name-only | wc -l)
+          export MINUTES DIFF_LINES COMMIT_COUNT FILES_CHANGED
+          python3 - <<'PY' >> .perf/metrics.jsonl
+          import json, os, datetime
+          metrics = {
+            "session": {
+              "id": f"pr-{os.environ['PR_NUMBER']}",
+              "duration_minutes": int(os.environ.get("MINUTES") or 0),
+              "status": "merged",
+              "created_at": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "title": os.environ.get("PR_TITLE", ""),
+            },
+            "quality": {
+              "test_pass_rate": 1.0,
+              "lint_pass": True,
+              "secrets_detected": False,
+              "pr_review_feedback": [],
+            },
+            "efficiency": {
+              "diff_lines": int(os.environ.get("DIFF_LINES") or 0),
+              "commit_count": int(os.environ.get("COMMIT_COUNT") or 0),
+              "rework_loops": 0,
+              "files_changed": int(os.environ.get("FILES_CHANGED") or 0),
+            },
+            "safety": {
+              "risk_flags": 0,
+              "approval_waited": True,
+              "merge_by_user": os.environ.get("PR_ACTOR", ""),
+            },
+          }
+          print(json.dumps(metrics, separators=(",", ":")))
+          PY
+
       - name: Push metrics update
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .perf/metrics.jsonl
-          git commit -m "docs: log performance metrics for PR #${{ github.event.pull_request.number }}" || true
+          git commit -m "docs: log performance metrics for PR #${PR_NUMBER}" || true
           git push || echo "metrics push skipped"

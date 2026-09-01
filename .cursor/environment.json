@@ -1,6 +1,6 @@
 {
   "name": "GitHub1",
-  "install": "npm ci --prefix apps/demo && npm ci --prefix apps/family-hearth",
+  "install": "bash .cursor/install.sh",
   "terminals": [
     {
       "name": "demo-server",

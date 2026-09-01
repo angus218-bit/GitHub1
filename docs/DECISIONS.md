@@ -42,6 +42,25 @@ Document major decisions made by Copilot or user when executing tasks.
 **Impact:** Agents follow `docs/GROK_CURSOR.md`. User completes Grok Bot sign-in, optional SuperGrok link, plugins, and `cursor.com/automations/new`.  
 **Status:** Active
 
+### Decision: Land remaining PRs as apps/ subprojects instead of overwriting root docs
+
+**Date:** 2026-09-01  
+**Issue:** PR #2, #4, #8 after user asked to resolve all  
+**Question:** Root README/AGENTS conflicted with the demo app and Family Hearth site.
+
+**Options Considered:**
+- **Option A: Keep Copilot + Grok docs at repo root; place apps under `apps/`**
+  - Pros: No loss of the performance system; both apps can exist; CI can test each package
+  - Cons: Original PRs assumed they owned the repo root
+- **Option B: Let Family Hearth or TaskBoard replace root README/AGENTS**
+  - Pros: Matches those PRs as written
+  - Cons: Deletes the performance system and Grok bridge that already merged
+
+**Decision:** Option A  
+**Rationale:** Conflicts were README/AGENTS only. Family Hearth copy is fictional Calder/Maplewick, so it can land without private-data exposure. PR #8 CI failed on multiline `GITHUB_OUTPUT` and a fake reviewer request; those are fixed in the integration.  
+**Impact:** `apps/demo`, `apps/family-hearth`, root `netlify.toml` base, Cloud Agent `install` runs `npm ci` in both apps.  
+**Status:** Active
+
 ### Decision: Use JWT for session auth instead of server-side sessions
 
 **Date:** 2024-01-10  

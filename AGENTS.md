@@ -140,7 +140,7 @@ Report via GitHub Issues or `.perf/metrics.json` (weekly snapshot).
 ## Lane Boundaries
 
 **In scope:**
-- Code in this repo.
+- Code in this repo, including `apps/demo` and `apps/family-hearth`.
 - CI/workflows in `.github/`.
 - Skills and prompts defined here.
 

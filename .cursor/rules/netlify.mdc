@@ -1,0 +1,14 @@
+---
+description: Netlify build, forms, and environment conventions
+globs: netlify.toml,index.html,src/**/*.{jsx,js,css}
+alwaysApply: false
+---
+
+# Netlify
+
+- Build: `npm run build`, publish directory `dist` (see `netlify.toml`).
+- SPA fallback: rewrite `/*` to `/index.html` with status 200.
+- Never hardcode secrets. Use Netlify environment variables; in Functions use `Netlify.env.get("VAR")`, not `process.env`.
+- Keep `.netlify` gitignored.
+- Netlify Forms: keep a hidden static form in `index.html` with the same `name` and fields as the React form so detection works at deploy time.
+- Prefer framework adapters over custom Functions unless server logic is required.

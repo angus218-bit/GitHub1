@@ -90,6 +90,17 @@ graph LR
 
 Grok 4.6 is a Cursor model. Persistent Grok teammates and SuperGrok usage grants live in Grok Bot on the same Cursor account. Playbook, plugin list, and dashboard automation templates: `docs/GROK_CURSOR.md`. Paste-ready automations: `.github/automations/`.
 
+### Apps
+
+Root docs stay the Copilot performance system. Product code from resolved PRs lives in `apps/`:
+
+| App | Path | Commands |
+| --- | --- | --- |
+| TaskBoard demo (PR #2) | `apps/demo` | `npm ci && npm run dev` (API `3001`, Vite `5173`) |
+| Calder Hearth (PR #4) | `apps/family-hearth` | `npm ci && npm run dev` (Vite `5174`) |
+
+Netlify builds `apps/family-hearth` via the root `netlify.toml` `base` setting. Content in `apps/family-hearth/src/data.js` is fictional (Calder / Maplewick), not private family records.
+
 ### Workflows (GitHub Actions)
 
 | Workflow | Trigger | Actions |

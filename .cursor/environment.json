@@ -1,0 +1,4 @@
+{
+  "name": "Copilot Performance System",
+  "install": "bash .cursor/install.sh"
+}

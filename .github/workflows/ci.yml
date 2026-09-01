@@ -33,7 +33,7 @@ jobs:
         if: steps.detect.outputs.type == 'node'
 
       # Python
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         if: steps.detect.outputs.type == 'python'
         with:
           python-version: "3.11"
@@ -45,7 +45,7 @@ jobs:
         if: steps.detect.outputs.type == 'python'
 
       # Go
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v5
         if: steps.detect.outputs.type == 'go'
         with:
           go-version: "1.21"

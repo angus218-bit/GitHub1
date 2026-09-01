@@ -1,0 +1,27 @@
+{
+  // markdownlint configuration for the Copilot Performance System docs.
+  // The docs are hand-authored prose with tables, Mermaid diagrams, and
+  // embedded HTML/JSON samples, so purely cosmetic rules are relaxed while
+  // structural correctness checks stay on.
+  "default": true,
+
+  // Long lines are common in tables, URLs, and command examples.
+  "MD013": false,
+  // Prose headings/lists are not always blank-line separated.
+  "MD022": false,
+  "MD032": false,
+  // Documentation references bare URLs directly.
+  "MD034": false,
+  // Some illustrative fenced blocks omit a language.
+  "MD040": false,
+  // Trailing whitespace is tolerated in sample blocks.
+  "MD009": false,
+  // Inline HTML is used for layout in a few places.
+  "MD033": false,
+  // First line is not required to be a top-level heading everywhere.
+  "MD041": false,
+  // Fenced blocks inside prose are not always blank-line separated.
+  "MD031": false,
+  // Repeated section names (e.g. "Performance Metrics") are intentional.
+  "MD024": false
+}

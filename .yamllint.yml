@@ -1,0 +1,17 @@
+# yamllint configuration for the Copilot Performance System.
+# Focuses on real YAML correctness (parse errors, indentation, key
+# duplication) rather than cosmetic style, so GitHub Actions workflows,
+# Dependabot config, and issue templates validate cleanly.
+extends: default
+
+rules:
+  # GitHub config files intentionally use long descriptions and URLs.
+  line-length: disable
+  # `---` document markers are optional for these single-document files.
+  document-start: disable
+  # `on:` in workflows is a mapping key, not a boolean literal.
+  truthy:
+    check-keys: false
+  comments:
+    min-spaces-from-content: 1
+  comments-indentation: disable

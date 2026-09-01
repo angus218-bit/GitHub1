@@ -1,0 +1,15 @@
+{
+  "name": "GitHub1",
+  "install": "npm ci --prefix apps/demo && npm ci --prefix apps/family-hearth",
+  "terminals": [
+    {
+      "name": "demo-server",
+      "command": "npm --prefix apps/demo run dev:server"
+    },
+    {
+      "name": "demo-client",
+      "command": "npm --prefix apps/demo run dev:client"
+    }
+  ],
+  "ports": [3001, 5173, 5174]
+}

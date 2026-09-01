@@ -1,0 +1,81 @@
+name: Test Affected Files Only
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect affected tests
+        id: affected
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin "${{ github.base_ref }}" --depth=1
+            CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")
+          else
+            CHANGED=$(git diff --name-only HEAD~1 HEAD)
+          fi
+
+          TESTS=""
+          while IFS= read -r FILE; do
+            [ -z "$FILE" ] && continue
+            case "$FILE" in
+              apps/demo/server/*.js)
+                TESTS="${TESTS} apps/demo/server/index.test.js"
+                ;;
+              apps/family-hearth/src/*|apps/family-hearth/index.html|apps/family-hearth/netlify.toml)
+                TESTS="${TESTS} apps/family-hearth/tests/site.test.js"
+                ;;
+            esac
+          done <<EOF
+          $CHANGED
+          EOF
+
+          {
+            echo "tests<<EOF"
+            echo "$TESTS"
+            echo "EOF"
+            echo "changed_files<<EOF"
+            echo "$CHANGED"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Run affected app tests
+        if: steps.affected.outputs.tests != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install and test demo
+        if: contains(steps.affected.outputs.tests, 'apps/demo/')
+        working-directory: apps/demo
+        run: |
+          npm ci
+          npm test
+
+      - name: Install and test family hearth
+        if: contains(steps.affected.outputs.tests, 'apps/family-hearth/')
+        working-directory: apps/family-hearth
+        run: |
+          npm ci
+          npm test
+
+      - name: Report test impact
+        run: |
+          {
+            echo "## Test Impact Report"
+            echo ""
+            echo "**Changed files:**"
+            echo '```'
+            echo "${{ steps.affected.outputs.changed_files }}"
+            echo '```'
+            echo "**Affected tests:** ${{ steps.affected.outputs.tests }}"
+          } >> "$GITHUB_STEP_SUMMARY"

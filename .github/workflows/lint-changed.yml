@@ -1,0 +1,47 @@
+name: Lint Changed Files Only
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find changed files
+        id: changed
+        run: |
+          set +e
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin "${{ github.base_ref }}" --depth=1
+            CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" | grep -E '\.(js|ts|jsx|tsx|py|go|java)$' | tr '\n' ' ')
+          else
+            CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '\.(js|ts|jsx|tsx|py|go|java)$' | tr '\n' ' ')
+          fi
+          {
+            echo "files<<EOF"
+            echo "$CHANGED"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Lint demo if JS changed
+        if: contains(steps.changed.outputs.files, 'apps/demo/')
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run demo eslint
+        if: contains(steps.changed.outputs.files, 'apps/demo/')
+        working-directory: apps/demo
+        run: |
+          npm ci
+          npm run lint
+
+      - name: Skip lint if no app JS changed
+        if: ${{ !contains(steps.changed.outputs.files, 'apps/demo/') }}
+        run: echo "No demo JS/TS changes; skipping eslint"

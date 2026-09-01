@@ -160,4 +160,5 @@ Report via GitHub Issues or `.perf/metrics.json` (weekly snapshot).
 3. Copilot coding agent picks up these instructions on next run.
 4. Create an issue or PR—Copilot will reference this guide.
 
-**Questions?** See https://docs.github.com/copilot/reference/customization-cheat-sheet
+**Questions?** See https://docs.github.com/copilot/reference/customization-cheat-sheet  
+**Editor shortcuts:** `docs/EDITOR_BASICS.md`

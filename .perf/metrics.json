@@ -1,0 +1,55 @@
+{
+  "last_updated": "2024-01-15T10:00:00Z",
+  "summary": {
+    "total_prs": 0,
+    "avg_latency_minutes": 0,
+    "test_pass_rate": 0.0,
+    "security_flags": 0,
+    "avg_diff_lines": 0,
+    "avg_rework_loops": 0.0
+  },
+  "weekly": {
+    "week_ending": "2024-01-15",
+    "prs": [],
+    "trends": {
+      "latency": "baseline",
+      "quality": "baseline",
+      "efficiency": "baseline"
+    }
+  },
+  "sessions": [
+    {
+      "id": "example-1",
+      "issue": "#1",
+      "created_at": "2024-01-15T10:00:00Z",
+      "merged_at": "2024-01-15T10:12:00Z",
+      "duration_minutes": 12,
+      "status": "merged",
+      "quality": {
+        "test_pass_rate": 1.0,
+        "lint_pass": true,
+        "secrets_detected": false,
+        "coverage": 0.87
+      },
+      "efficiency": {
+        "diff_lines": 23,
+        "commit_count": 1,
+        "rework_loops": 0,
+        "files_changed": 1
+      },
+      "safety": {
+        "risk_flags": 0,
+        "approval_waited": true,
+        "merge_by_user": "angus218-bit",
+        "secrets_blocked": 0
+      }
+    }
+  ],
+  "targets": {
+    "latency_minutes_max": 30,
+    "test_pass_rate_min": 0.9,
+    "diff_lines_max": 100,
+    "rework_loops_max": 0.5,
+    "security_flags_max": 0
+  }
+}

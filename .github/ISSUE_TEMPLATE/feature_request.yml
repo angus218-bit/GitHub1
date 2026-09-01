@@ -1,0 +1,63 @@
+name: Feature Request
+description: Suggest a new feature or enhancement
+labels: ["enhancement"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Help us understand your idea.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the pain point or missing capability.
+      placeholder: |
+        Users can't export reports to PDF. They have to manually copy data to another tool.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How should this feature work?
+      placeholder: |
+        Add an "Export as PDF" button on the Reports page. PDF should include:
+        - Report title and date
+        - All filtered data in a table
+        - Charts as images
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other ways to solve this?
+      placeholder: |
+        - Export as CSV (simpler but less formatted)
+        - Email PDF directly (good but adds complexity)
+        - PDF export via third-party service (cost vs. built-in)
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - "🔴 Critical (blocking most users)"
+        - "🟡 High (affects many users)"
+        - "🟢 Medium (nice to have)"
+        - "⚪ Low (future enhancement)"
+      default: 2
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: This feature doesn't already exist
+          required: true
+        - label: I've checked for similar feature requests
+          required: true

@@ -1,0 +1,11 @@
+version: 1
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "angus218-bit"
+    labels:
+      - "dependencies"

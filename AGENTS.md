@@ -49,6 +49,13 @@ Review pull requests for logic, security, style, and risk.
 - Automated: Check diff against project rules (via `.github/prompts/pr-review.prompt.md`).
 - Manual: Deep dive on complex PRs (via user request).
 
+### 7. **grok-cursor**
+Route work between Grok (model + Grok Bot) and Cursor Cloud Agents.
+- Grok 4.6 inside Cursor is already the coding model.
+- Grok Bot (same Cursor account) owns cross-app plugins, skills, and routines.
+- Repo edits go to Cursor Cloud Agents / PRs, not the Grok Bot computer.
+- Playbook: `docs/GROK_CURSOR.md`. Paste-ready Bot + automation prompts live in `.github/prompts/` and `.github/automations/`.
+
 ---
 
 ## Integrated Prompts (in `.github/prompts/`)
@@ -64,6 +71,9 @@ Triggered on new issue. Covers:
 - Classification (bug/feature/chore).
 - Reproduce steps (if applicable).
 - Priority and assigned skill.
+
+### **grok-bot-cursor-coder.md** / **grok-bot-first-task.md**
+Paste into Grok Bot to create a Cursor Coder teammate and run the first GitHub handoff check.
 
 ---
 
@@ -139,6 +149,7 @@ Report via GitHub Issues or `.perf/metrics.json` (weekly snapshot).
 - Financial or legal advice.
 - Third-party contact or trades.
 - Installation of Copilot config on user machines.
+- Completing SuperGrok / X / plugin OAuth for the user (browser-only; SuperGrok link is permanent).
 
 ---
 

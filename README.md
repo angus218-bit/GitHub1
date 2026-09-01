@@ -74,6 +74,7 @@ graph LR
 | **safe-git** | Commit/branch management, secret detection | Before merge |
 | **decision-crunch** | Resolve ambiguity with 1 clarifying question | Spec is unclear |
 | **pr-review** | Automated + manual PR review | Every PR opened |
+| **grok-cursor** | Route Grok Bot ↔ Cursor Cloud Agents | Linking Grok, plugins, automations, coding handoff |
 
 ### Prompts (Specialized Workflows)
 
@@ -82,6 +83,12 @@ graph LR
 | `open-pr.prompt.md` | PR created | Template with checklist, risk assessment |
 | `pr-review.prompt.md` | PR updated | Automated checks + approval decision |
 | `triage-issue.prompt.md` | Issue created | Classification, priority, skill assignment |
+| `grok-bot-cursor-coder.md` | Creating a Grok Bot teammate | Cursor Coder Bot description |
+| `grok-bot-first-task.md` | First Grok Bot message | GitHub + skill setup check |
+
+### Grok ↔ Cursor
+
+Grok 4.6 is a Cursor model. Persistent Grok teammates and SuperGrok usage grants live in Grok Bot on the same Cursor account. Playbook, plugin list, and dashboard automation templates: `docs/GROK_CURSOR.md`. Paste-ready automations: `.github/automations/`.
 
 ### Workflows (GitHub Actions)
 

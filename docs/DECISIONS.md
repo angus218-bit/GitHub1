@@ -23,6 +23,25 @@ Document major decisions made by Copilot or user when executing tasks.
 
 ## Decisions
 
+### Decision: Grok talks to Cursor through Grok Bot + Cloud Agents, not a custom MCP in this repo
+
+**Date:** 2026-09-01  
+**Issue:** User asked to link a Grok account to Cursor and add connectors/automations  
+**Question:** Should we host a custom MCP that wraps the Cursor Cloud Agents API, or use official Grok Bot / dashboard surfaces?
+
+**Options Considered:**
+- **Option A: Official Grok Bot + Cursor Automations + Cloud Agents API**
+  - Pros: First-party auth, shared Cursor account, plugins, routines, dashboard automations
+  - Cons: OAuth still requires the user in a browser; SuperGrok link is permanent
+- **Option B: Custom public MCP in this repo wrapping `api.cursor.com`**
+  - Pros: grok.com Custom connector could call Cursor directly
+  - Cons: Needs a hosted public URL and a Cursor API key; extra secret surface; duplicates Grok Bot
+
+**Decision:** Option A  
+**Rationale:** Cursor and SpaceXAI already share Grok Bot on the Cursor account. MCP auth is shared on Teams. A home-grown MCP would store a Cursor API key and still could not finish OAuth. Templates in `.github/automations/` and `.github/prompts/` are the parts this repo can own.  
+**Impact:** Agents follow `docs/GROK_CURSOR.md`. User completes Grok Bot sign-in, optional SuperGrok link, plugins, and `cursor.com/automations/new`.  
+**Status:** Active
+
 ### Decision: Use JWT for session auth instead of server-side sessions
 
 **Date:** 2024-01-10  

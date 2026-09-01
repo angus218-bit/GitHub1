@@ -99,11 +99,16 @@ function Rsvp() {
     const form = event.currentTarget;
     const data = new FormData(form);
     try {
-      await fetch("/", {
+      const response = await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams(data).toString(),
       });
+      // Netlify Forms returns 200. Vite preview has no form endpoint (404).
+      if (!response.ok && response.status !== 404) {
+        setStatus("error");
+        return;
+      }
       setStatus("sent");
       form.reset();
     } catch {

@@ -1,0 +1,89 @@
+name: Bug Report
+description: Report a bug or unexpected behavior
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please provide as much detail as possible.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear description of what the bug is.
+      placeholder: |
+        Example: "Login form hangs when I click submit."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce this bug?
+      placeholder: |
+        1. Navigate to /login
+        2. Enter username "test@example.com"
+        3. Enter password "Test1234"
+        4. Click "Submit"
+        5. Form hangs (no spinner, no error)
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should happen instead?
+      placeholder: "A spinner should appear, then redirect to dashboard."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened?
+      placeholder: "Form freezes with no visual feedback. After 30 sec, page reloads and error appears in console."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Windows
+        - macOS
+        - Linux
+      multiple: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version / Commit
+      description: App version or git commit hash
+      placeholder: "v1.2.3 or abc1234567"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error logs or stack trace
+      description: Paste any error messages or console output
+      render: bash
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I've searched for similar issues
+          required: true
+        - label: I can reproduce this consistently
+          required: true
+        - label: This is blocking my work
+          required: false
